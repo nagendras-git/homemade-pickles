@@ -96,6 +96,48 @@
       margin-bottom: 16px;
     }
 
+    /* ── COLLAPSIBLE SECTION ── */
+    .sec-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 12px 16px;
+      background: #8B5E3C;
+      color: white;
+      border-radius: 12px;
+      font-weight: 600;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sec-header:active { opacity: 0.9; }
+    .sec-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+    .sec-header-count {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    .sec-toggle {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+    .sec-toggle.open { transform: rotate(180deg); }
+    .sec-content {
+      overflow: hidden;
+      max-height: 2000px;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      opacity: 1;
+    }
+    .sec-content.closed {
+      max-height: 0;
+      opacity: 0;
+    }
+
     .products-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -357,7 +399,7 @@
     .btn-cancel {
       flex: 1;
       background: var(--bg);
-      border: none;
+      border: 1.5px solid var(--div);
       border-radius: 12px;
       padding: 14px;
       font-size: 14px;
@@ -439,6 +481,38 @@
 
     /* ── DESKTOP VIEW ── */
     @media (min-width: 768px) {
+      /* Outer page background */
+      body {
+        background: #D6C4A8;
+      }
+
+      /* Phone-shell wrapper — centers everything like a mobile mockup */
+      .page-wrapper {
+        max-width: 480px;
+        margin: 40px auto;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 24px 80px rgba(43,24,16,0.22), 0 0 0 1px rgba(43,24,16,0.08);
+        background: var(--bg);
+        position: relative;
+      }
+
+      /* Sticky button becomes static inside the shell */
+      .sticky {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        border-radius: 0 0 28px 28px;
+        padding: 16px 24px 24px;
+        background: var(--bg);
+      }
+
+      /* Remove bottom padding used to clear the fixed sticky bar */
+      .app-shell {
+        padding-bottom: 24px;
+      }
+
       .modal {
         position: relative;
         bottom: auto;
@@ -487,6 +561,7 @@
   </style>
 </head>
 <body>
+<div class="page-wrapper">
 
 <!-- HERO -->
 <div class="hero">
@@ -499,9 +574,18 @@
 
 <!-- MAIN CONTENT -->
 <div class="app-shell">
-  <div class="sec-label">Our Pickles</div>
 
-  <div class="products-grid">
+  <div class="sec-header" onclick="toggleSection(this)">
+    <div class="sec-header-left">
+      <span>🥒</span>
+      <span>Our Pickles</span>
+      <span class="sec-header-count">6 varieties</span>
+    </div>
+    <span class="sec-toggle open">▼</span>
+  </div>
+
+  <div class="sec-content">
+  <div class="products-grid" style="margin-top: 12px;">
     <div class="product-card" onclick="selectProduct(this, 'Mango Pickle', 250)">
       <div class="product-icon">🥭</div>
       <div class="product-name">Mango</div>
@@ -545,13 +629,16 @@
     </div>
   </div>
 
-  <p class="chip-note">Each jar is 500g. Tap to add to order.</p>
+  <p class="chip-note" style="padding: 0 4px 8px;">Each jar is 500g. Tap to add to order.</p>
+  </div><!-- end sec-content -->
 </div>
 
 <!-- STICKY BUTTON -->
 <div class="sticky">
   <button class="btn-sticky" onclick="openOrder()">Place Order</button>
 </div>
+
+</div><!-- end page-wrapper -->
 
 <!-- ORDER MODAL -->
 <div class="overlay" id="m-order" onclick="overlayClose(event)">
@@ -636,6 +723,13 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  function toggleSection(header) {
+    const content = header.nextElementSibling;
+    const toggle = header.querySelector('.sec-toggle');
+    content.classList.toggle('closed');
+    toggle.classList.toggle('open');
+  }
+
   const WHATSAPP = '919876543210'; // Replace with actual WhatsApp number
   let selectedItems = [];
 
@@ -729,8 +823,11 @@
   }
 
   // Set default date to today
-  flatpickr = window.flatpickr || {};
-  document.getElementById('f-date').valueAsDate = new Date();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  document.getElementById('f-date').value = `${yyyy}-${mm}-${dd}`;
 </script>
 
 </body>
