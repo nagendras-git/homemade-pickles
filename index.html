@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light only">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Homemade Pickles - Fresh & Delicious</title>
+  <title>Satyavathi's Homemade Pickles</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -110,6 +110,10 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
+    .sec-header.veg    { background: #5A7A3A; }
+    .sec-header.nonveg { background: #8B3A3A; }
+    .sec-header.snacks { background: #B5631A; }
+    .sec-header.sweets { background: #9A4A7A; }
     .sec-header:active { opacity: 0.9; }
     .sec-header-left {
       display: flex;
@@ -227,11 +231,16 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      /* Warm pickle-tinted dim instead of cold black */
+      background: rgba(107, 68, 35, 0.45);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.35s ease;
       z-index: 1000;
+      /* Align sheet to bottom so page peeks at top */
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
     }
 
     .overlay.open {
@@ -240,31 +249,35 @@
     }
 
     .modal {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card);
-      border-radius: 24px 24px 0 0;
-      max-height: 90vh;
+      width: 100%;
+      background: #FFFDF8;
+      /* Only round the top corners — bottom flush with screen edge */
+      border-radius: 28px 28px 0 0;
+      /* Show ~85% of screen so ~15% of the page peeks above */
+      max-height: 87vh;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
       transform: translateY(100%);
-      transition: transform 0.3s;
+      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
       z-index: 1001;
+      /* Subtle top shadow to separate sheet from page */
+      box-shadow: 0 -8px 40px rgba(107, 68, 35, 0.18);
     }
 
     .overlay.open .modal {
       transform: translateY(0);
     }
 
+    /* Drag handle — warm pickle color */
     .m-handle {
       height: 4px;
-      width: 40px;
+      width: 44px;
       background: var(--div);
       border-radius: 2px;
-      margin: 12px auto;
+      margin: 14px auto 6px;
+      flex-shrink: 0;
     }
 
     .m-header {
@@ -318,7 +331,8 @@
 
     .fi {
       width: 100%;
-      background: var(--bg);
+      /* Warmer input background — earthy food feel, not cold white */
+      background: #F3E9D8;
       border: 1.5px solid var(--div);
       border-radius: 11px;
       padding: 12px 13px;
@@ -358,7 +372,7 @@
     }
 
     .qty-item {
-      background: var(--bg);
+      background: #F3E9D8;
       border: 1.5px solid var(--div);
       border-radius: 11px;
       padding: 12px;
@@ -481,6 +495,42 @@
       display: block;
     }
 
+    /* ── TOTAL BAR ── */
+    .total-bar {
+      display: none;
+      background: linear-gradient(135deg, #F3E9D8, #EDD9BE);
+      border: 1.5px solid var(--accent);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 4px 0 16px;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 0.2s ease;
+    }
+    .total-bar.visible { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .total-bar-left { font-size: 12px; color: var(--text2); font-weight: 600; }
+    .total-bar-items { font-size: 11px; color: var(--text3); margin-top: 2px; }
+    .total-bar-amount { font-size: 20px; font-weight: 800; color: #8B5E3C; font-family: var(--font-head); }
+
+    /* ── MODAL SUBSECTION ── */
+    .qty-sub-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin: 12px 0 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-sub-label.veg    { background: #EAF3E0; color: #4A6A2A; }
+    .qty-sub-label.nonveg { background: #F5E0E0; color: #7A2A2A; }
+    .qty-sub-label.snacks { background: #FBE9D8; color: #8A4A10; }
+    .qty-sub-label.sweets { background: #F5E0F0; color: #7A2A6A; }
+
     /* ── DESKTOP VIEW ── */
     @media (min-width: 768px) {
       /* Outer page background */
@@ -516,39 +566,23 @@
       }
 
       .modal {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        max-height: none;
-        transform: none;
-        max-width: 500px;
-        margin: 40px auto;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(43,24,16,0.15);
+        max-width: 480px;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -8px 40px rgba(107,68,35,0.18);
       }
 
       .overlay {
-        display: flex;
         align-items: flex-end;
         justify-content: center;
-        padding: 20px;
+        padding: 0;
       }
 
       .overlay.open .modal {
-        transform: scale(1);
+        transform: translateY(0);
       }
 
       .m-handle {
-        display: none;
-      }
-
-      .modal {
-        transform: scale(0.95);
-      }
-
-      .overlay.open .modal {
-        transform: scale(1);
+        display: block;
       }
 
       .hero-title {
@@ -568,71 +602,95 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">🥒 Homemade Pickles</div>
-    <h1 class="hero-title">Fresh & Delicious</h1>
-    <p class="hero-sub">Authentic homemade pickles made with love. Tangy, crispy, and full of flavor.</p>
+    <div class="hero-tag">🥒 Homemade Pickles · Andhra Style</div>
+    <h1 class="hero-title">Satyavathi's</h1>
+    <h2 style="font-family:var(--font-head);font-size:20px;font-style:italic;color:var(--text2);margin-bottom:10px;">Homemade Pickles</h2>
+    <p class="hero-sub">Authentic Andhra pickles, crispy snacks &amp; homemade sweets.<br>Veg &amp; Non-Veg · Made fresh with love.</p>
   </div>
 </div>
 
 <!-- MAIN CONTENT -->
 <div class="app-shell">
 
-  <div class="sec-header" onclick="toggleSection(this)">
+  <!-- VEG PICKLES -->
+  <div class="sec-header veg" onclick="toggleSection(this)">
     <div class="sec-header-left">
-      <span>🥒</span>
-      <span>Our Pickles</span>
+      <span>🟢</span>
+      <span>Veg Pickles</span>
       <span class="sec-header-count">6 varieties</span>
     </div>
     <span class="sec-toggle open">▼</span>
   </div>
-
   <div class="sec-content">
-  <div class="products-grid" style="margin-top: 12px;">
-    <div class="product-card" onclick="selectProduct(this, 'Mango Pickle', 250)">
-      <div class="product-icon">🥭</div>
-      <div class="product-name">Mango</div>
-      <div class="product-desc">Sweet & Tangy</div>
-      <div class="product-price">₹250</div>
+    <div class="products-grid" style="margin-top:12px;">
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🥭</div><div class="product-name">Mango</div><div class="product-desc">Sweet &amp; Tangy</div><div class="product-price">₹250</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🌱</div><div class="product-name">Gongura</div><div class="product-desc">Sour &amp; Spicy</div><div class="product-price">₹220</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🍅</div><div class="product-name">Tomato</div><div class="product-desc">Rich &amp; Spicy</div><div class="product-price">₹180</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🌿</div><div class="product-name">Drumstick</div><div class="product-desc">Crunchy &amp; Mild</div><div class="product-price">₹200</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🫘</div><div class="product-name">Beans</div><div class="product-desc">Fresh &amp; Tangy</div><div class="product-price">₹190</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🥢</div><div class="product-name">Mixed</div><div class="product-desc">All Flavors</div><div class="product-price">₹280</div></div>
     </div>
-
-    <div class="product-card" onclick="selectProduct(this, 'Gongura Pickle', 220)">
-      <div class="product-icon">🌱</div>
-      <div class="product-name">Gongura</div>
-      <div class="product-desc">Sour & Spicy</div>
-      <div class="product-price">₹220</div>
-    </div>
-
-    <div class="product-card" onclick="selectProduct(this, 'Tomato Pickle', 180)">
-      <div class="product-icon">🍅</div>
-      <div class="product-name">Tomato</div>
-      <div class="product-desc">Rich & Spicy</div>
-      <div class="product-price">₹180</div>
-    </div>
-
-    <div class="product-card" onclick="selectProduct(this, 'Drumstick Pickle', 200)">
-      <div class="product-icon">🌿</div>
-      <div class="product-name">Drumstick</div>
-      <div class="product-desc">Crunchy & Mild</div>
-      <div class="product-price">₹200</div>
-    </div>
-
-    <div class="product-card" onclick="selectProduct(this, 'Beans Pickle', 190)">
-      <div class="product-icon">🫘</div>
-      <div class="product-name">Beans</div>
-      <div class="product-desc">Fresh & Tangy</div>
-      <div class="product-price">₹190</div>
-    </div>
-
-    <div class="product-card" onclick="selectProduct(this, 'Mixed Pickle', 280)">
-      <div class="product-icon">🥢</div>
-      <div class="product-name">Mixed</div>
-      <div class="product-desc">All Flavors</div>
-      <div class="product-price">₹280</div>
-    </div>
+    <p class="chip-note" style="padding:0 4px 8px;">Each jar is 500g · Tap to order</p>
   </div>
 
-  <p class="chip-note" style="padding: 0 4px 8px;">Each jar is 500g. Tap to add to order.</p>
-  </div><!-- end sec-content -->
+  <!-- NON-VEG PICKLES -->
+  <div class="sec-header nonveg" style="margin-top:12px;" onclick="toggleSection(this)">
+    <div class="sec-header-left">
+      <span>🔴</span>
+      <span>Non-Veg Pickles</span>
+      <span class="sec-header-count">5 varieties</span>
+    </div>
+    <span class="sec-toggle open">▼</span>
+  </div>
+  <div class="sec-content">
+    <div class="products-grid" style="margin-top:12px;">
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🍗</div><div class="product-name">Chicken (with bone)</div><div class="product-desc">Spicy &amp; Bold</div><div class="product-price">₹350</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🍗</div><div class="product-name">Chicken (boneless)</div><div class="product-desc">Tender &amp; Spicy</div><div class="product-price">₹380</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🥩</div><div class="product-name">Mutton</div><div class="product-desc">Rich &amp; Fiery</div><div class="product-price">₹420</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🦐</div><div class="product-name">Prawn</div><div class="product-desc">Coastal Spice</div><div class="product-price">₹380</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🐟</div><div class="product-name">Fish</div><div class="product-desc">Traditional Andhra Style</div><div class="product-price">₹300</div></div>
+    </div>
+    <p class="chip-note" style="padding:0 4px 8px;">Each jar is 500g · Tap to order</p>
+  </div>
+
+  <!-- CRISPY SNACKS -->
+  <div class="sec-header snacks" style="margin-top:12px;" onclick="toggleSection(this)">
+    <div class="sec-header-left">
+      <span>🟠</span>
+      <span>Crispy Snacks</span>
+      <span class="sec-header-count">3 varieties</span>
+    </div>
+    <span class="sec-toggle open">▼</span>
+  </div>
+  <div class="sec-content">
+    <div class="products-grid" style="margin-top:12px;">
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🌀</div><div class="product-name">Murukulu</div><div class="product-desc">Crunchy &amp; Savoury</div><div class="product-price">₹150</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🫓</div><div class="product-name">Chekkalu</div><div class="product-desc">Rice Crackers</div><div class="product-price">₹130</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🟡</div><div class="product-name">Boondi</div><div class="product-desc">Light &amp; Crispy</div><div class="product-price">₹100</div></div>
+    </div>
+    <p class="chip-note" style="padding:0 4px 8px;">Per 250g packet · Tap to order</p>
+  </div>
+
+  <!-- HOMEMADE SWEETS -->
+  <div class="sec-header sweets" style="margin-top:12px;" onclick="toggleSection(this)">
+    <div class="sec-header-left">
+      <span>🪷</span>
+      <span>Homemade Sweets</span>
+      <span class="sec-header-count">5 varieties</span>
+    </div>
+    <span class="sec-toggle open">▼</span>
+  </div>
+  <div class="sec-content">
+    <div class="products-grid" style="margin-top:12px;">
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🤍</div><div class="product-name">Sunnundalu</div><div class="product-desc">Urad Dal Laddu</div><div class="product-price">₹200</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🟠</div><div class="product-name">Rava Laddu</div><div class="product-desc">Soft &amp; Sweet</div><div class="product-price">₹180</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🍯</div><div class="product-name">Ariselu</div><div class="product-desc">Rice &amp; Jaggery Sweet</div><div class="product-price">₹220</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">🌸</div><div class="product-name">Gavvalu</div><div class="product-desc">Shell-Shaped Sweet</div><div class="product-price">₹160</div></div>
+      <div class="product-card" onclick="openOrder()"><div class="product-icon">⚪</div><div class="product-name">Gorimiti</div><div class="product-desc">Crispy Sugar Sweet</div><div class="product-price">₹170</div></div>
+    </div>
+    <p class="chip-note" style="padding:0 4px 8px;">Per 250g · Tap to order</p>
+  </div>
+
 </div>
 
 <!-- STICKY BUTTON -->
@@ -671,34 +729,57 @@
       </div>
 
       <div class="qty-section">
-        <label class="fl">Select Pickles</label>
+        <label class="fl">Select Items</label>
+
+        <!-- VEG -->
+        <div class="qty-sub-label veg">🟢 Veg Pickles</div>
         <div class="qty-grid">
-          <div class="qty-item" onclick="pickItem(this, 'Mango Pickle', 250)">
-            <span class="qty-label">🥭 Mango</span>
-            <span class="qty-price">₹250</span>
-          </div>
-          <div class="qty-item" onclick="pickItem(this, 'Gongura Pickle', 220)">
-            <span class="qty-label">🌱 Gongura</span>
-            <span class="qty-price">₹220</span>
-          </div>
-          <div class="qty-item" onclick="pickItem(this, 'Tomato Pickle', 180)">
-            <span class="qty-label">🍅 Tomato</span>
-            <span class="qty-price">₹180</span>
-          </div>
-          <div class="qty-item" onclick="pickItem(this, 'Drumstick Pickle', 200)">
-            <span class="qty-label">🌿 Drumstick</span>
-            <span class="qty-price">₹200</span>
-          </div>
-          <div class="qty-item" onclick="pickItem(this, 'Beans Pickle', 190)">
-            <span class="qty-label">🫘 Beans</span>
-            <span class="qty-price">₹190</span>
-          </div>
-          <div class="qty-item" onclick="pickItem(this, 'Mixed Pickle', 280)">
-            <span class="qty-label">🥢 Mixed</span>
-            <span class="qty-price">₹280</span>
-          </div>
+          <div class="qty-item" onclick="pickItem(this,'Mango Pickle',250)"><span class="qty-label">🥭 Mango</span><span class="qty-price">₹250</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Gongura Pickle',220)"><span class="qty-label">🌱 Gongura</span><span class="qty-price">₹220</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Tomato Pickle',180)"><span class="qty-label">🍅 Tomato</span><span class="qty-price">₹180</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Drumstick Pickle',200)"><span class="qty-label">🌿 Drumstick</span><span class="qty-price">₹200</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Beans Pickle',190)"><span class="qty-label">🫘 Beans</span><span class="qty-price">₹190</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Mixed Pickle',280)"><span class="qty-label">🥢 Mixed</span><span class="qty-price">₹280</span></div>
         </div>
-        <span class="chip-note" style="margin-top: 10px;">Tap to select multiple pickles</span>
+
+        <!-- NON-VEG -->
+        <div class="qty-sub-label nonveg" style="margin-top:16px;">🔴 Non-Veg Pickles</div>
+        <div class="qty-grid">
+          <div class="qty-item" onclick="pickItem(this,'Chicken Pickle (with bone)',350)"><span class="qty-label">🍗 Chicken (bone)</span><span class="qty-price">₹350</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Chicken Pickle (boneless)',380)"><span class="qty-label">🍗 Chicken (boneless)</span><span class="qty-price">₹380</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Mutton Pickle',420)"><span class="qty-label">🥩 Mutton</span><span class="qty-price">₹420</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Prawn Pickle',380)"><span class="qty-label">🦐 Prawn</span><span class="qty-price">₹380</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Fish Pickle',300)"><span class="qty-label">🐟 Fish</span><span class="qty-price">₹300</span></div>
+        </div>
+
+        <!-- CRISPY SNACKS -->
+        <div class="qty-sub-label snacks" style="margin-top:16px;">🟠 Crispy Snacks</div>
+        <div class="qty-grid">
+          <div class="qty-item" onclick="pickItem(this,'Murukulu',150)"><span class="qty-label">🌀 Murukulu</span><span class="qty-price">₹150</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Chekkalu',130)"><span class="qty-label">🫓 Chekkalu</span><span class="qty-price">₹130</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Boondi',100)"><span class="qty-label">🟡 Boondi</span><span class="qty-price">₹100</span></div>
+        </div>
+
+        <!-- HOMEMADE SWEETS -->
+        <div class="qty-sub-label sweets" style="margin-top:16px;">🪷 Homemade Sweets</div>
+        <div class="qty-grid">
+          <div class="qty-item" onclick="pickItem(this,'Sunnundalu',200)"><span class="qty-label">🤍 Sunnundalu</span><span class="qty-price">₹200</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Rava Laddu',180)"><span class="qty-label">🟠 Rava Laddu</span><span class="qty-price">₹180</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Ariselu',220)"><span class="qty-label">🍯 Ariselu</span><span class="qty-price">₹220</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Gavvalu',160)"><span class="qty-label">🌸 Gavvalu</span><span class="qty-price">₹160</span></div>
+          <div class="qty-item" onclick="pickItem(this,'Gorimiti',170)"><span class="qty-label">⚪ Gorimiti</span><span class="qty-price">₹170</span></div>
+        </div>
+
+        <span class="chip-note" style="margin-top:10px;">Tap to select · choose multiple</span>
+      </div>
+
+      <!-- LIVE TOTAL BAR -->
+      <div class="total-bar" id="total-bar">
+        <div class="total-bar-left">
+          Order Total
+          <div class="total-bar-items" id="total-items-text"></div>
+        </div>
+        <div class="total-bar-amount" id="total-amount">₹0</div>
       </div>
 
       <div class="fg">
@@ -716,7 +797,7 @@
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-send" onclick="sendOrder()">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-        Send via WhatsApp
+        <span id="send-btn-text">Send via WhatsApp</span>
       </button>
     </div>
   </div>
@@ -732,22 +813,36 @@
     toggle.classList.toggle('open');
   }
 
-  const WHATSAPP = '919876543210'; // Replace with actual WhatsApp number
-  let selectedItems = [];
+  const WHATSAPP = '919876543210'; // Replace with Satyavathi's number
 
-  function selectProduct(el, name, price) {
-    openOrder();
-  }
+  // Store items as { name, price } objects for total calculation
+  let selectedItems = [];
 
   function pickItem(el, name, price) {
     el.classList.toggle('selected');
-    
     if (el.classList.contains('selected')) {
-      if (!selectedItems.includes(name)) {
-        selectedItems.push(name);
-      }
+      selectedItems.push({ name, price });
     } else {
-      selectedItems = selectedItems.filter(item => item !== name);
+      selectedItems = selectedItems.filter(i => i.name !== name);
+    }
+    updateTotal();
+  }
+
+  function updateTotal() {
+    const total = selectedItems.reduce((sum, i) => sum + i.price, 0);
+    const bar = document.getElementById('total-bar');
+    const amountEl = document.getElementById('total-amount');
+    const itemsEl = document.getElementById('total-items-text');
+    const btnText = document.getElementById('send-btn-text');
+
+    if (selectedItems.length > 0) {
+      bar.classList.add('visible');
+      amountEl.textContent = `₹${total}`;
+      itemsEl.textContent = `${selectedItems.length} jar${selectedItems.length > 1 ? 's' : ''} selected`;
+      btnText.textContent = `Send Order · ₹${total}`;
+    } else {
+      bar.classList.remove('visible');
+      btnText.textContent = 'Send via WhatsApp';
     }
   }
 
@@ -766,55 +861,58 @@
   }
 
   function sendOrder() {
-    const name = document.getElementById('f-name').value.trim();
+    const name  = document.getElementById('f-name').value.trim();
     const phone = document.getElementById('f-phone').value.trim();
-    const flat = document.getElementById('f-flat').value.trim();
-    const date = document.getElementById('f-date').value;
-    const note = document.getElementById('f-note').value.trim();
+    const flat  = document.getElementById('f-flat').value.trim();
+    const date  = document.getElementById('f-date').value;
+    const note  = document.getElementById('f-note').value.trim();
 
-    // Validation
-    if (!name) { toast('Please enter your name', true); return; }
-    if (!phone) { toast('Please enter your phone number', true); return; }
-    if (selectedItems.length === 0) { toast('Please select at least one pickle', true); return; }
+    if (!name)                  { toast('Please enter your name', true); return; }
+    if (!phone)                 { toast('Please enter your phone number', true); return; }
+    if (!selectedItems.length)  { toast('Please select at least one pickle', true); return; }
 
     // Format date
     let deliveryStr = '';
     if (date) {
-      const dateParts = date.split('-');
-      const dateObj = new Date(`${dateParts[0]}-${dateParts[1]}-${dateParts[2]}T00:00:00`);
-      if (!isNaN(dateObj)) {
-        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        deliveryStr = `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+      const parts = date.split('-');
+      const d = new Date(`${parts[0]}-${parts[1]}-${parts[2]}T00:00:00`);
+      if (!isNaN(d)) {
+        const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        deliveryStr = `${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
       }
     }
 
-    // Build message
+    const total = selectedItems.reduce((sum, i) => sum + i.price, 0);
+    const itemLines = selectedItems.map(i => `   • ${i.name} — ₹${i.price}`).join('\n');
+
     const msg = [
-      "🥒 *New Pickle Order - Homemade Pickles*",
+      "🥒 *New Order — Satyavathi's Homemade Pickles*",
       '--------------------',
       `👤 *Name:* ${name}`,
       `📞 *Phone:* ${phone}`,
       flat ? `🏠 *Address:* ${flat}` : '',
-      `🥢 *Pickles:* ${selectedItems.join(', ')}`,
+      `🛒 *Pickles Ordered:*\n${itemLines}`,
+      `💰 *Total Amount: ₹${total}*`,
       deliveryStr ? `📅 *Delivery By:* ${deliveryStr}` : '',
       note ? `📝 *Special Request:* ${note}` : '',
       '--------------------',
-      'Sent via Homemade Pickles order form'
+      "Sent via Satyavathi's Pickle order form"
     ].filter(Boolean).join('\n');
 
-    // Send to WhatsApp
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
     closeModal();
-    toast('Order sent! ✓');
+    toast('Order sent to Satyavathi ✓');
 
-    // Clear form
-    document.getElementById('f-name').value = '';
-    document.getElementById('f-phone').value = '';
-    document.getElementById('f-flat').value = '';
-    document.getElementById('f-date').value = '';
-    document.getElementById('f-note').value = '';
+    // Reset form
+    ['f-name','f-phone','f-flat','f-date','f-note'].forEach(id => document.getElementById(id).value = '');
     document.querySelectorAll('.qty-item').forEach(el => el.classList.remove('selected'));
     selectedItems = [];
+    updateTotal();
+
+    // Reset date to today
+    const today = new Date();
+    document.getElementById('f-date').value =
+      `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   }
 
   function toast(msg, err = false) {
