@@ -360,47 +360,100 @@
       resize: none;
     }
 
-    /* ── QUANTITY SELECTOR ── */
-    .qty-section {
-      margin-bottom: 20px;
-    }
+    /* ── CART ITEMS (Swiggy-style) ── */
+    .qty-section { margin-bottom: 8px; }
 
-    .qty-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .cart-category { margin-bottom: 4px; }
+
+    /* Full-width item row */
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--div);
       gap: 10px;
     }
+    .cart-item:last-child { border-bottom: none; }
 
-    .qty-item {
-      background: #F3E9D8;
-      border: 1.5px solid var(--div);
-      border-radius: 11px;
-      padding: 12px;
-      text-align: center;
+    .cart-item-left { flex: 1; min-width: 0; }
+    .cart-item-emoji { font-size: 20px; margin-bottom: 2px; }
+    .cart-item-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text1); line-height: 1.3;
+    }
+    .cart-item-desc {
+      font-size: 11px; color: var(--text3); margin-top: 1px;
+    }
+    .cart-item-baseprice {
+      font-size: 11px; color: var(--text2);
+      font-weight: 600; margin-top: 2px;
+    }
+
+    /* ADD button (shown when qty = 0) */
+    .btn-add {
+      background: white;
+      border: 1.5px solid #25D366;
+      border-radius: 8px;
+      color: #25D366;
+      font-size: 13px; font-weight: 700;
+      padding: 7px 18px;
       cursor: pointer;
-      transition: all 0.2s;
-      font-size: 13px;
+      font-family: var(--font-body);
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .btn-add:active { background: #e8fdf0; }
+
+    /* Controls (shown when qty > 0) */
+    .cart-item-controls {
+      display: none;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .cart-item-controls.visible { display: flex; }
+
+    /* Weight chips */
+    .weight-chips {
+      display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .weight-chip {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 5px;
+      border: 1.5px solid var(--div);
+      background: #F3E9D8; color: var(--text2);
+      cursor: pointer; transition: all 0.15s;
+      font-family: var(--font-body);
+    }
+    .weight-chip.active {
+      background: #8B5E3C; border-color: #8B5E3C; color: white;
     }
 
-    .qty-item.selected {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-      font-weight: 700;
+    /* ± counter */
+    .qty-counter {
+      display: flex; align-items: center; gap: 0;
+      background: #25D366; border-radius: 8px; overflow: hidden;
+    }
+    .qty-btn {
+      background: none; border: none;
+      color: white; font-size: 18px; font-weight: 700;
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-family: var(--font-body);
+      transition: background 0.15s;
+    }
+    .qty-btn:active { background: rgba(0,0,0,0.15); }
+    .qty-count {
+      color: white; font-size: 14px; font-weight: 700;
+      min-width: 24px; text-align: center;
     }
 
-    .qty-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      opacity: 0.8;
-    }
-
-    .qty-price {
-      display: block;
-      font-weight: 700;
-      font-size: 14px;
+    /* Item subtotal */
+    .cart-item-subtotal {
+      font-size: 11px; font-weight: 700;
+      color: #8B5E3C; text-align: right;
     }
 
     /* ── ACTIONS ── */
@@ -730,47 +783,8 @@
 
       <div class="qty-section">
         <label class="fl">Select Items</label>
-
-        <!-- VEG -->
-        <div class="qty-sub-label veg">🟢 Veg Pickles</div>
-        <div class="qty-grid">
-          <div class="qty-item" onclick="pickItem(this,'Mango Pickle',250)"><span class="qty-label">🥭 Mango</span><span class="qty-price">₹250</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Gongura Pickle',220)"><span class="qty-label">🌱 Gongura</span><span class="qty-price">₹220</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Tomato Pickle',180)"><span class="qty-label">🍅 Tomato</span><span class="qty-price">₹180</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Drumstick Pickle',200)"><span class="qty-label">🌿 Drumstick</span><span class="qty-price">₹200</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Beans Pickle',190)"><span class="qty-label">🫘 Beans</span><span class="qty-price">₹190</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Mixed Pickle',280)"><span class="qty-label">🥢 Mixed</span><span class="qty-price">₹280</span></div>
-        </div>
-
-        <!-- NON-VEG -->
-        <div class="qty-sub-label nonveg" style="margin-top:16px;">🔴 Non-Veg Pickles</div>
-        <div class="qty-grid">
-          <div class="qty-item" onclick="pickItem(this,'Chicken Pickle (with bone)',350)"><span class="qty-label">🍗 Chicken (bone)</span><span class="qty-price">₹350</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Chicken Pickle (boneless)',380)"><span class="qty-label">🍗 Chicken (boneless)</span><span class="qty-price">₹380</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Mutton Pickle',420)"><span class="qty-label">🥩 Mutton</span><span class="qty-price">₹420</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Prawn Pickle',380)"><span class="qty-label">🦐 Prawn</span><span class="qty-price">₹380</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Fish Pickle',300)"><span class="qty-label">🐟 Fish</span><span class="qty-price">₹300</span></div>
-        </div>
-
-        <!-- CRISPY SNACKS -->
-        <div class="qty-sub-label snacks" style="margin-top:16px;">🟠 Crispy Snacks</div>
-        <div class="qty-grid">
-          <div class="qty-item" onclick="pickItem(this,'Murukulu',150)"><span class="qty-label">🌀 Murukulu</span><span class="qty-price">₹150</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Chekkalu',130)"><span class="qty-label">🫓 Chekkalu</span><span class="qty-price">₹130</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Boondi',100)"><span class="qty-label">🟡 Boondi</span><span class="qty-price">₹100</span></div>
-        </div>
-
-        <!-- HOMEMADE SWEETS -->
-        <div class="qty-sub-label sweets" style="margin-top:16px;">🪷 Homemade Sweets</div>
-        <div class="qty-grid">
-          <div class="qty-item" onclick="pickItem(this,'Sunnundalu',200)"><span class="qty-label">🤍 Sunnundalu</span><span class="qty-price">₹200</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Rava Laddu',180)"><span class="qty-label">🟠 Rava Laddu</span><span class="qty-price">₹180</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Ariselu',220)"><span class="qty-label">🍯 Ariselu</span><span class="qty-price">₹220</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Gavvalu',160)"><span class="qty-label">🌸 Gavvalu</span><span class="qty-price">₹160</span></div>
-          <div class="qty-item" onclick="pickItem(this,'Gorimiti',170)"><span class="qty-label">⚪ Gorimiti</span><span class="qty-price">₹170</span></div>
-        </div>
-
-        <span class="chip-note" style="margin-top:10px;">Tap to select · choose multiple</span>
+        <div id="menu-render"></div>
+        <span class="chip-note" style="margin-top:8px;">Tap ADD · choose weight · adjust quantity</span>
       </div>
 
       <!-- LIVE TOTAL BAR -->
@@ -806,39 +820,187 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  function toggleSection(header) {
-    const content = header.nextElementSibling;
-    const toggle = header.querySelector('.sec-toggle');
-    content.classList.toggle('closed');
-    toggle.classList.toggle('open');
-  }
-
   const WHATSAPP = '919876543210'; // Replace with Satyavathi's number
 
-  // Store items as { name, price } objects for total calculation
-  let selectedItems = [];
+  // ── MENU DATA ──────────────────────────────────────────────
+  // basePrice = price per 500g (pickles/snacks) or per 250g (sweets)
+  // weights: label, factor relative to basePrice
+  const MENU = [
+    {
+      category: 'Veg Pickles', icon: '🟢', cls: 'veg',
+      weights: [{l:'250g',f:0.5},{l:'500g',f:1},{l:'1kg',f:2}],
+      note: '500g jar',
+      items: [
+        { id:'mango',    emoji:'🥭', name:'Mango Pickle',      desc:'Sweet & Tangy',    basePrice:250 },
+        { id:'gongura',  emoji:'🌱', name:'Gongura Pickle',    desc:'Sour & Spicy',     basePrice:220 },
+        { id:'tomato',   emoji:'🍅', name:'Tomato Pickle',     desc:'Rich & Spicy',     basePrice:180 },
+        { id:'drumstick',emoji:'🌿', name:'Drumstick Pickle',  desc:'Crunchy & Mild',   basePrice:200 },
+        { id:'beans',    emoji:'🫘', name:'Beans Pickle',      desc:'Fresh & Tangy',    basePrice:190 },
+        { id:'mixed',    emoji:'🥢', name:'Mixed Pickle',      desc:'All Flavours',     basePrice:280 },
+      ]
+    },
+    {
+      category: 'Non-Veg Pickles', icon: '🔴', cls: 'nonveg',
+      weights: [{l:'250g',f:0.5},{l:'500g',f:1},{l:'1kg',f:2}],
+      note: '500g jar',
+      items: [
+        { id:'chkbone',  emoji:'🍗', name:'Chicken (with bone)',  desc:'Spicy & Bold',    basePrice:350 },
+        { id:'chkbless', emoji:'🍗', name:'Chicken (boneless)',   desc:'Tender & Spicy',  basePrice:380 },
+        { id:'mutton',   emoji:'🥩', name:'Mutton Pickle',        desc:'Rich & Fiery',    basePrice:420 },
+        { id:'prawn',    emoji:'🦐', name:'Prawn Pickle',         desc:'Coastal Spice',   basePrice:380 },
+        { id:'fish',     emoji:'🐟', name:'Fish Pickle',          desc:'Traditional Style',basePrice:300 },
+      ]
+    },
+    {
+      category: 'Crispy Snacks', icon: '🟠', cls: 'snacks',
+      weights: [{l:'250g',f:1},{l:'500g',f:1.8},{l:'1kg',f:3.4}],
+      note: '250g packet',
+      items: [
+        { id:'murukulu', emoji:'🌀', name:'Murukulu',  desc:'Crunchy & Savoury', basePrice:150 },
+        { id:'chekkalu', emoji:'🫓', name:'Chekkalu',  desc:'Rice Crackers',     basePrice:130 },
+        { id:'boondi',   emoji:'🟡', name:'Boondi',    desc:'Light & Crispy',    basePrice:100 },
+      ]
+    },
+    {
+      category: 'Homemade Sweets', icon: '🪷', cls: 'sweets',
+      weights: [{l:'100g',f:0.4},{l:'250g',f:1},{l:'500g',f:1.8}],
+      note: '250g box',
+      items: [
+        { id:'sunnu',   emoji:'🤍', name:'Sunnundalu', desc:'Urad Dal Laddu',       basePrice:200 },
+        { id:'rava',    emoji:'🟠', name:'Rava Laddu',  desc:'Soft & Sweet',         basePrice:180 },
+        { id:'ariselu', emoji:'🍯', name:'Ariselu',     desc:'Rice & Jaggery Sweet', basePrice:220 },
+        { id:'gavvalu', emoji:'🌸', name:'Gavvalu',     desc:'Shell-Shaped Sweet',   basePrice:160 },
+        { id:'gorimit', emoji:'⚪', name:'Gorimiti',    desc:'Crispy Sugar Sweet',   basePrice:170 },
+      ]
+    }
+  ];
 
-  function pickItem(el, name, price) {
-    el.classList.toggle('selected');
-    if (el.classList.contains('selected')) {
-      selectedItems.push({ name, price });
+  // ── CART STATE ─────────────────────────────────────────────
+  // cart[itemId] = { item, catWeights, weightIdx, qty }
+  let cart = {};
+
+  // ── RENDER MENU INTO MODAL ─────────────────────────────────
+  function renderMenu() {
+    const container = document.getElementById('menu-render');
+    container.innerHTML = '';
+    MENU.forEach(cat => {
+      const catDiv = document.createElement('div');
+      catDiv.className = 'cart-category';
+
+      // Sub-label
+      const label = document.createElement('div');
+      label.className = `qty-sub-label ${cat.cls}`;
+      label.textContent = `${cat.icon} ${cat.category}`;
+      label.style.marginTop = '16px';
+      catDiv.appendChild(label);
+
+      // Items
+      cat.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.id = `row-${item.id}`;
+        row.innerHTML = `
+          <div class="cart-item-left">
+            <div class="cart-item-emoji">${item.emoji}</div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-desc">${item.desc}</div>
+            <div class="cart-item-baseprice">₹${item.basePrice} / ${cat.note}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+            <button class="btn-add" id="add-${item.id}" onclick="addItem('${item.id}','${cat.cls}')">+ ADD</button>
+            <div class="cart-item-controls" id="ctrl-${item.id}">
+              <div class="weight-chips" id="wchips-${item.id}">
+                ${cat.weights.map((w,i)=>`<button class="weight-chip${i===1?' active':''}" onclick="setWeight('${item.id}',${i})">${w.l}</button>`).join('')}
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="cart-item-subtotal" id="sub-${item.id}"></span>
+                <div class="qty-counter">
+                  <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+                  <span class="qty-count" id="cnt-${item.id}">1</span>
+                  <button class="qty-btn" onclick="changeQty('${item.id}',+1)">+</button>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        catDiv.appendChild(row);
+      });
+
+      container.appendChild(catDiv);
+    });
+  }
+
+  // ── CART FUNCTIONS ─────────────────────────────────────────
+  function getItemAndCat(itemId) {
+    for (const cat of MENU) {
+      const item = cat.items.find(i => i.id === itemId);
+      if (item) return { item, cat };
+    }
+    return null;
+  }
+
+  function addItem(itemId) {
+    const { item, cat } = getItemAndCat(itemId);
+    const defaultWeightIdx = cat.cls === 'sweets' ? 1 : 1; // default 500g / 250g
+    cart[itemId] = { item, cat, weightIdx: defaultWeightIdx, qty: 1 };
+    document.getElementById(`add-${itemId}`).style.display = 'none';
+    document.getElementById(`ctrl-${itemId}`).classList.add('visible');
+    refreshItem(itemId);
+    updateTotal();
+  }
+
+  function setWeight(itemId, idx) {
+    if (!cart[itemId]) return;
+    cart[itemId].weightIdx = idx;
+    // Update active chip
+    document.querySelectorAll(`#wchips-${itemId} .weight-chip`).forEach((c,i) => {
+      c.classList.toggle('active', i === idx);
+    });
+    refreshItem(itemId);
+    updateTotal();
+  }
+
+  function changeQty(itemId, delta) {
+    if (!cart[itemId]) return;
+    cart[itemId].qty = Math.max(0, cart[itemId].qty + delta);
+    if (cart[itemId].qty === 0) {
+      delete cart[itemId];
+      document.getElementById(`add-${itemId}`).style.display = '';
+      document.getElementById(`ctrl-${itemId}`).classList.remove('visible');
     } else {
-      selectedItems = selectedItems.filter(i => i.name !== name);
+      refreshItem(itemId);
     }
     updateTotal();
   }
 
+  function refreshItem(itemId) {
+    if (!cart[itemId]) return;
+    const { item, cat, weightIdx, qty } = cart[itemId];
+    const w = cat.weights[weightIdx];
+    const subtotal = Math.round(item.basePrice * w.f * qty);
+    document.getElementById(`cnt-${itemId}`).textContent = qty;
+    document.getElementById(`sub-${itemId}`).textContent = `₹${subtotal}`;
+  }
+
+  function getItemSubtotal(itemId) {
+    if (!cart[itemId]) return 0;
+    const { item, cat, weightIdx, qty } = cart[itemId];
+    return Math.round(item.basePrice * cat.weights[weightIdx].f * qty);
+  }
+
+  // ── TOTAL BAR ──────────────────────────────────────────────
   function updateTotal() {
-    const total = selectedItems.reduce((sum, i) => sum + i.price, 0);
+    const ids = Object.keys(cart);
+    const total = ids.reduce((sum, id) => sum + getItemSubtotal(id), 0);
     const bar = document.getElementById('total-bar');
     const amountEl = document.getElementById('total-amount');
     const itemsEl = document.getElementById('total-items-text');
     const btnText = document.getElementById('send-btn-text');
 
-    if (selectedItems.length > 0) {
+    if (ids.length > 0) {
       bar.classList.add('visible');
       amountEl.textContent = `₹${total}`;
-      itemsEl.textContent = `${selectedItems.length} jar${selectedItems.length > 1 ? 's' : ''} selected`;
+      const totalItems = ids.reduce((s,id)=>s+cart[id].qty,0);
+      itemsEl.textContent = `${totalItems} item${totalItems>1?'s':''} · ${ids.length} product${ids.length>1?'s':''}`;
       btnText.textContent = `Send Order · ₹${total}`;
     } else {
       bar.classList.remove('visible');
@@ -846,20 +1008,26 @@
     }
   }
 
+  // ── MODAL OPEN/CLOSE ───────────────────────────────────────
   function openOrder() {
     document.getElementById('m-order').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
   function closeModal() {
     document.getElementById('m-order').classList.remove('open');
     document.body.style.overflow = '';
   }
-
   function overlayClose(e) {
     if (e.target === document.getElementById('m-order')) closeModal();
   }
+  function toggleSection(header) {
+    const content = header.nextElementSibling;
+    const toggle = header.querySelector('.sec-toggle');
+    content.classList.toggle('closed');
+    toggle.classList.toggle('open');
+  }
 
+  // ── SEND ORDER ─────────────────────────────────────────────
   function sendOrder() {
     const name  = document.getElementById('f-name').value.trim();
     const phone = document.getElementById('f-phone').value.trim();
@@ -867,49 +1035,60 @@
     const date  = document.getElementById('f-date').value;
     const note  = document.getElementById('f-note').value.trim();
 
-    if (!name)                  { toast('Please enter your name', true); return; }
-    if (!phone)                 { toast('Please enter your phone number', true); return; }
-    if (!selectedItems.length)  { toast('Please select at least one pickle', true); return; }
+    if (!name)              { toast('Please enter your name', true); return; }
+    if (!phone)             { toast('Please enter your phone number', true); return; }
+    if (!Object.keys(cart).length) { toast('Please add at least one item', true); return; }
 
     // Format date
     let deliveryStr = '';
     if (date) {
-      const parts = date.split('-');
-      const d = new Date(`${parts[0]}-${parts[1]}-${parts[2]}T00:00:00`);
+      const p = date.split('-');
+      const d = new Date(`${p[0]}-${p[1]}-${p[2]}T00:00:00`);
       if (!isNaN(d)) {
         const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         deliveryStr = `${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
       }
     }
 
-    const total = selectedItems.reduce((sum, i) => sum + i.price, 0);
-    const itemLines = selectedItems.map(i => `   • ${i.name} — ₹${i.price}`).join('\n');
+    const total = Object.keys(cart).reduce((s,id)=>s+getItemSubtotal(id),0);
+
+    // Group items by category for a clean message
+    const msgLines = [];
+    MENU.forEach(cat => {
+      const catItems = cat.items.filter(i => cart[i.id]);
+      if (!catItems.length) return;
+      msgLines.push(`\n*${cat.icon} ${cat.category}*`);
+      catItems.forEach(item => {
+        const { weightIdx, qty } = cart[item.id];
+        const w = cat.weights[weightIdx].l;
+        const sub = getItemSubtotal(item.id);
+        msgLines.push(`   • ${item.emoji} ${item.name} — ${w} × ${qty} = ₹${sub}`);
+      });
+    });
 
     const msg = [
       "🥒 *New Order — Satyavathi's Homemade Pickles*",
-      '--------------------',
+      '────────────────────',
       `👤 *Name:* ${name}`,
       `📞 *Phone:* ${phone}`,
       flat ? `🏠 *Address:* ${flat}` : '',
-      `🛒 *Pickles Ordered:*\n${itemLines}`,
-      `💰 *Total Amount: ₹${total}*`,
+      `\n🛒 *Order Details:*${msgLines.join('\n')}`,
+      `\n💰 *Total Amount: ₹${total}*`,
       deliveryStr ? `📅 *Delivery By:* ${deliveryStr}` : '',
       note ? `📝 *Special Request:* ${note}` : '',
-      '--------------------',
-      "Sent via Satyavathi's Pickle order form"
+      '────────────────────',
+      "Sent via Satyavathi's order form"
     ].filter(Boolean).join('\n');
 
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
     closeModal();
     toast('Order sent to Satyavathi ✓');
 
-    // Reset form
-    ['f-name','f-phone','f-flat','f-date','f-note'].forEach(id => document.getElementById(id).value = '');
-    document.querySelectorAll('.qty-item').forEach(el => el.classList.remove('selected'));
-    selectedItems = [];
+    // Reset
+    ['f-name','f-phone','f-flat','f-note'].forEach(id => document.getElementById(id).value = '');
+    cart = {};
+    renderMenu(); // re-render to reset all ADD buttons
     updateTotal();
-
-    // Reset date to today
     const today = new Date();
     document.getElementById('f-date').value =
       `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
@@ -922,12 +1101,11 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // Set default date to today
+  // ── INIT ───────────────────────────────────────────────────
+  renderMenu();
   const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
-  document.getElementById('f-date').value = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('f-date').value =
+    `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
 </script>
 
 </body>
